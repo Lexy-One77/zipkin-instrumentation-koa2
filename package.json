@@ -1,12 +1,12 @@
 {
   "name": "zipkin-instrumentation-koa2",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "koa2 middleware for instrumentation with Zipkin.js",
   "main": "lib/index.js",
   "scripts": {
     "build": "babel src -d lib",
     "test": "mocha --require ../../test/helper.js",
-    "prepublish": "npm run build"
+//    "prepublish": "npm run build"
   },
   "author": "OpenZipkin <openzipkin.alt@gmail.com>",
   "license": "Apache-2.0",
