@@ -1,0 +1,25 @@
+{
+  "name": "zipkin-instrumentation-express",
+  "version": "0.7.1",
+  "description": "Express middleware for instrumentation with Zipkin.js",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "babel src -d lib",
+    "test": "mocha --require ../../test/helper.js",
+    "prepublish": "npm run build"
+  },
+  "author": "OpenZipkin <openzipkin.alt@gmail.com>",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/openzipkin/zipkin-js",
+  "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "express": "^4.13.4",
+    "express-http-proxy": "^0.11.0",
+    "mocha": "^3.2.0",
+    "node-fetch": "^1.5.3",
+    "zipkin": "^0.7.1",
+    "zipkin-context-cls": "^0.6.1"
+  },
+  "_from": "zipkin-instrumentation-express@0.7.1",
+  "_resolved": "http://registry.npm.taobao.org/zipkin-instrumentation-express/download/zipkin-instrumentation-express-0.7.1.tgz"
+}
