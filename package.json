@@ -1,7 +1,7 @@
 {
-  "name": "zipkin-instrumentation-express",
-  "version": "0.7.1",
-  "description": "Express middleware for instrumentation with Zipkin.js",
+  "name": "zipkin-instrumentation-koa2",
+  "version": "0.0.1",
+  "description": "koa2 middleware for instrumentation with Zipkin.js",
   "main": "lib/index.js",
   "scripts": {
     "build": "babel src -d lib",
@@ -10,7 +10,7 @@
   },
   "author": "OpenZipkin <openzipkin.alt@gmail.com>",
   "license": "Apache-2.0",
-  "repository": "https://github.com/openzipkin/zipkin-js",
+  "repository": "http://gitlab.djdev.com/art-node/zipkin-instrumentation-koa2.git",
   "devDependencies": {
     "babel-cli": "^6.23.0",
     "express": "^4.13.4",
