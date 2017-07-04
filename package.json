@@ -4,9 +4,9 @@
   "description": "koa2 middleware for instrumentation with Zipkin.js",
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src -d lib",
+    "build": "echo '123'",
     "test": "mocha --require ../../test/helper.js",
-//    "prepublish": "npm run build"
+    "prepublish": "npm run build"
   },
   "author": "OpenZipkin <openzipkin.alt@gmail.com>",
   "license": "Apache-2.0",
