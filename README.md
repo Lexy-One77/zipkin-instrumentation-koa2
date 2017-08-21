@@ -1,63 +1,45 @@
-# zipkin-instrumentation-express
+# zipkin-instrumentation-koa2
 
-Express middleware and instrumentation that adds Zipkin tracing to the application.
+koa2 middleware and instrumentation that adds Zipkin tracing to the application.
 
-## Express Middleware
+## koa2 Middleware
 
 ```javascript
-const express = require('express');
+const koa = require('koa');
 const {Tracer, ExplicitContext, ConsoleRecorder} = require('zipkin');
-const zipkinMiddleware = require('zipkin-instrumentation-express').expressMiddleware;
+const zipkinMiddleware = require('zipkin-instrumentation-koa2').expressMiddleware;
 
 const ctxImpl = new ExplicitContext();
 const recorder = new ConsoleRecorder();
 
 const tracer = new Tracer({ctxImpl, recorder}); // configure your tracer properly here
 
-const app = express();
+const app = new koa();
+
+//add this code first
+//模拟express框架自定义get、header属性，兼容koa2框架
+app.use(async function (ctx, next) {
+    ctx.req.get = ctx.req.header = (name)=> {
+        if (!name)
+            throw new TypeError('name argument is required to ctx.req.header');
+        if (typeof name !== 'string')
+            throw new TypeError('name must be a string to ctx.req.header');
+        let lc = name.toLowerCase();
+        switch (lc) {
+            case 'referer':
+            case 'referrer':
+                return ctx.req.headers.referrer
+                    || ctx.req.headers.referer;
+            default:
+                return ctx.req.headers[lc];
+        }
+    }
+    await next()
+});
 
 // Add the Zipkin middleware
 app.use(zipkinMiddleware({
   tracer,
   serviceName: 'service-a' // name of this application
 }));
-```
-
-## Express HTTP Proxy
-
-This library will wrap [express-http-proxy](https://www.npmjs.com/package/express-http-proxy) to add headers and record traces.
-
-```javascript
-const {ConsoleRecorder, Tracer, ExplicitContext} = require('zipkin');
-const {wrapExpressHttpProxy} = require('zipkin-instrumentation-express');
-const proxy = require('express-http-proxy');
-
-const ctxImpl = new ExplicitContext();
-const recorder = new ConsoleRecorder();
-const tracer = new Tracer({ctxImpl, recorder});
-const serviceName = 'weather-app';
-const remoteServiceName = 'weather-api';
-
-const zipkinProxy = wrapExpressHttpProxy(proxy, {tracer, serviceName, remoteServiceName});
-
-app.use('/api/weather', zipkinProxy('http://api.weather.com', {
-  decorateRequest: (proxyReq, originalReq) => proxyReq.method = 'POST' // You can use express-http-proxy options as usual
-}));
-```
-This can also be combined with Zipkin Express Middleware. Note the use of `zipkin-context-cls`.
-```javascript
-const {ConsoleRecorder, Tracer} = require('zipkin');
-const {expressMiddleware, wrapExpressHttpProxy} = require('zipkin-instrumentation-express')
-const CLSContext = require('zipkin-context-cls');
-const proxy = require('express-http-proxy');
-
-const ctxImpl = new CLSContext();
-const recorder = new ConsoleRecorder();
-const tracer = new Tracer({ctxImpl, recorder});
-const serviceName = 'weather-app';
-const remoteServiceName = 'weather-api';
-
-const zipkinProxy = wrapExpressHttpProxy(proxy, {tracer, serviceName, remoteServiceName});
-
-app.use('/api/weather', expressMiddleware({tracer, serviceName}), zipkinProxy('http://api.weather.com'));
 ```
